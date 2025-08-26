@@ -1,50 +1,154 @@
-# Welcome to your Expo app 👋
+# CurrencyCalc 💱
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A modern, feature-rich currency converter app built with React Native and Expo. Convert between currencies with real-time rates, track your conversion history, and enjoy a beautiful dark/light theme experience.
 
-## Get started
+## ✨ Features
 
-1. Install dependencies
+### 🔄 Currency Conversion
+- **Complete Currency Support**: Convert between all major world currencies
+- **Real-time Conversion**: Instant currency conversion with up-to-date rates
+- **Smart Currency Selection**: Popular currencies for quick access + full searchable list
+- **Swap Functionality**: Easily swap between source and target currencies
+- **Quick Amount Buttons**: Preset amounts (100, 500, 1K) for faster input
 
+### 🎨 Modern UI/UX
+- **Dark/Light Theme Toggle**: System-wide theme switching with persistence
+- **Beautiful Design**: Modern, clean interface with smooth animations
+- **Responsive Layout**: Optimized for all screen sizes
+- **Intuitive Navigation**: Tab-based navigation with themed icons
+
+### 📊 Conversion History
+- **Track All Conversions**: Automatic saving of all currency conversions
+- **Detailed History View**: See amount, currencies, results, and timestamps
+- **Statistics Dashboard**: View total conversions and currencies used
+- **Clear History**: Option to clear all conversion history
+- **Persistent Storage**: History saved locally using AsyncStorage
+
+### 🌟 Additional Features
+- **Theme Persistence**: Your theme choice is remembered across app restarts
+- **Search Functionality**: Search through currencies by code or name
+- **Flag Emojis**: Visual currency identification with country flags
+- **Error Handling**: Graceful error handling with user-friendly messages
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js (v16 or higher)
+- npm or yarn
+- Expo CLI
+- iOS Simulator or Android Emulator (optional)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd CurrencyCalc
+   ```
+
+2. **Install dependencies**
    ```bash
    npm install
    ```
 
-2. Start the app
-
+3. **Start the development server**
    ```bash
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+4. **Run the app**
+   - Scan the QR code with Expo Go app on your phone
+   - Press `i` for iOS simulator
+   - Press `a` for Android emulator
+   - Press `w` to run in web browser
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## 📱 App Structure
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### Screens
+- **Home** (`app/(tabs)/index.tsx`): Welcome screen with app features and FAQs
+- **Currency Converter** (`app/(tabs)/explore.tsx`): Main conversion interface
+- **History** (`app/(tabs)/history.tsx`): Conversion history and statistics
 
-## Get a fresh project
+### Key Components
+- **CurrencyPicker**: Advanced currency selection with search and popular currencies
+- **ResultCard**: Displays conversion results with theme-aware styling
+- **ThemeToggleButton**: System-wide theme switching component
+- **ThemedText/ThemedView**: Theme-aware UI components
 
-When you're ready, run:
+### Theme System
+- **ThemeContext**: Centralized theme management
+- **useThemeManager**: Hook for theme state and persistence
+- **Color System**: Comprehensive color palette for light/dark modes
 
-```bash
-npm run reset-project
+## 🛠 Technical Details
+
+### Built With
+- **React Native**: Cross-platform mobile development
+- **Expo**: Development platform and tools
+- **TypeScript**: Type-safe JavaScript
+- **Expo Router**: File-based navigation
+- **AsyncStorage**: Local data persistence
+
+### Architecture
+- **Component-based**: Modular, reusable components
+- **Context API**: Global state management for themes
+- **Custom Hooks**: Reusable logic for theme management
+- **File-based Routing**: Expo Router for navigation
+
+### Key Dependencies
+- `@react-native-async-storage/async-storage`: Local storage
+- `expo-router`: Navigation and routing
+- `expo-status-bar`: Status bar management
+- `react-native-safe-area-context`: Safe area handling
+
+## 🎨 Theming
+
+The app features a comprehensive theming system with:
+- **Light Theme**: Clean, bright interface
+- **Dark Theme**: Easy on the eyes for low-light usage
+- **Automatic Persistence**: Theme choice saved across app restarts
+- **System-wide Application**: All components respect the current theme
+
+## 💾 Data Storage
+
+- **Conversion History**: Stored locally using AsyncStorage
+- **Theme Preference**: Persisted theme selection
+- **Automatic Cleanup**: Efficient storage management
+
+## 🔧 Development
+
+### Project Structure
+```
+CurrencyCalc/
+├── app/                    # Main app screens
+│   ├── (tabs)/            # Tab-based screens
+│   └── _layout.tsx        # Root layout
+├── components/            # Reusable components
+├── constants/            # App constants
+├── hooks/               # Custom hooks
+├── theme/              # Theme system
+├── utils/             # Utility functions
+└── assets/           # Images and fonts
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### Adding New Features
+1. Create components in `components/`
+2. Add screens to `app/(tabs)/`
+3. Update theme colors in `theme/colors.ts`
+4. Use `useTheme` hook for theme-aware styling
 
-## Learn more
+## 📄 License
 
-To learn more about developing your project with Expo, look at the following resources:
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## 🤝 Contributing
 
-## Join the community
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-Join our community of developers creating universal apps.
+## 📞 Support
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+If you have any questions or issues, please open an issue on GitHub.
+
+---
+
+**CurrencyCalc** - Making currency conversion simple, beautiful, and efficient! 💱✨
