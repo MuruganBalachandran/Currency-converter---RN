@@ -3,7 +3,7 @@
 A modern, feature-rich currency converter app built with React Native and Expo. Convert between currencies with real-time rates, track your conversion history, and enjoy a beautiful dark/light theme experience.
 
 # UI Images
-<img width="3438" height="5105" alt="Image" src="https://github.com/user-attachments/assets/a7aef7a7-2092-43c6-a928-d7b0f45456ff" />
+<img width="3438" height="5105" alt="Image" src="https://github.com/user-attachments/assets/1fb5b99a-e078-4e82-96ae-7c12013b37f7" />
 
 ## ✨ Features
 
