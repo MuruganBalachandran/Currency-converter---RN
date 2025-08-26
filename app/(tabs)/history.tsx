@@ -3,27 +3,35 @@ import { ThemedView } from '@/components/ThemedView';
 import { ThemeToggleButton } from '@/components/ThemeToggleButton';
 import { useTheme } from '@/theme/ThemeContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useEffect, useState, useMemo } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { ScrollView, StyleSheet, View, TouchableOpacity, Alert } from 'react-native';
 
 export default function HistoryScreen() {
   const [history, setHistory] = useState<{ from: string; to: string; amount: string; result: string; date: string }[]>([]);
   const { colors } = useTheme();
 
-  useEffect(() => {
-    loadHistory();
-  }, []);
-
-  const loadHistory = async () => {
+  const loadHistory = useCallback(async () => {
     try {
-      const stored = await AsyncStorage.getItem('currency_history');
+      const stored = await AsyncStorage.getItem('conversionHistory');
       if (stored) {
         setHistory(JSON.parse(stored));
       }
     } catch (e) {
       console.error('Error loading history:', e);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    loadHistory();
+  }, [loadHistory]);
+
+  // Reload history when screen comes into focus
+  useFocusEffect(
+    useCallback(() => {
+      loadHistory();
+    }, [loadHistory])
+  );
 
   const clearHistory = () => {
     Alert.alert(
@@ -36,7 +44,7 @@ export default function HistoryScreen() {
           style: 'destructive',
           onPress: async () => {
             try {
-              await AsyncStorage.removeItem('currency_history');
+              await AsyncStorage.removeItem('conversionHistory');
               setHistory([]);
             } catch (e) {
               console.error('Error clearing history:', e);

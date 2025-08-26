@@ -93,8 +93,6 @@ export default function CurrencyPicker({ currencies, selected, onSelect }: Props
   const [searchQuery, setSearchQuery] = useState('');
   const { colors } = useTheme();
 
-  const popularCurrencies = ['USD', 'EUR', 'GBP', 'JPY', 'INR', 'CAD', 'AUD', 'CHF'];
-
   const filteredCurrencies = currencies.filter(currency => 
     currency.toLowerCase().includes(searchQuery.toLowerCase()) ||
     (CURRENCY_NAMES[currency] && CURRENCY_NAMES[currency].toLowerCase().includes(searchQuery.toLowerCase()))
@@ -107,59 +105,47 @@ export default function CurrencyPicker({ currencies, selected, onSelect }: Props
   };
 
   const styles = useMemo(() => StyleSheet.create({
-    popularScroll: {
-      maxHeight: 60,
-    },
-    popularContainer: {
-      paddingHorizontal: 4,
-      gap: 8,
-    },
-    popularItem: {
-      alignItems: 'center',
-      paddingHorizontal: 12,
-      paddingVertical: 8,
-      borderRadius: 12,
-      backgroundColor: colors.primaryTransparent,
-      borderWidth: 1,
+    pickerButton: {
+      backgroundColor: colors.surface,
+      borderRadius: 16,
+      padding: 16,
+      borderWidth: 2,
       borderColor: colors.border,
-      minWidth: 60,
-    },
-    popularItemSelected: {
-      backgroundColor: colors.primary,
-      borderColor: colors.primary,
-    },
-    popularFlag: {
-      fontSize: 16,
-      marginBottom: 2,
-    },
-    popularText: {
-      fontSize: 12,
-      color: colors.primary,
-      fontWeight: '600',
-    },
-    popularTextSelected: {
-      color: '#fff',
-    },
-    moreButton: {
+      flexDirection: 'row',
       alignItems: 'center',
-      paddingHorizontal: 12,
-      paddingVertical: 8,
-      borderRadius: 12,
-      backgroundColor: colors.primaryTransparent,
-      borderWidth: 1,
-      borderColor: colors.border,
-      borderStyle: 'dashed',
-      minWidth: 60,
+      justifyContent: 'space-between',
+      elevation: 2,
+      shadowColor: colors.primary,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
     },
-    moreText: {
-      fontSize: 16,
+    pickerButtonContent: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      flex: 1,
+    },
+    pickerFlag: {
+      fontSize: 24,
+      marginRight: 12,
+    },
+    pickerInfo: {
+      flex: 1,
+    },
+    pickerCode: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: colors.text,
+    },
+    pickerName: {
+      fontSize: 14,
+      color: colors.textSecondary,
+      marginTop: 2,
+    },
+    pickerArrow: {
+      fontSize: 18,
       color: colors.primary,
       fontWeight: 'bold',
-    },
-    moreLabel: {
-      fontSize: 12,
-      color: colors.primary,
-      fontWeight: '600',
     },
     modalContainer: {
       flex: 1,
@@ -288,43 +274,24 @@ export default function CurrencyPicker({ currencies, selected, onSelect }: Props
 
   return (
     <>
-      {/* Popular currencies quick selection */}
-      <ScrollView 
-        horizontal 
-        showsHorizontalScrollIndicator={false} 
-        style={styles.popularScroll}
-        contentContainerStyle={styles.popularContainer}
+      {/* Currency Picker Button */}
+      <TouchableOpacity
+        style={styles.pickerButton}
+        onPress={() => setModalVisible(true)}
       >
-        {popularCurrencies.map((currency) => (
-          <TouchableOpacity
-            key={currency}
-            style={[
-              styles.popularItem,
-              selected === currency && styles.popularItemSelected
-            ]}
-            onPress={() => onSelect(currency)}
-          >
-            <ThemedText style={styles.popularFlag}>
-              {CURRENCY_FLAGS[currency] || '💰'}
+        <View style={styles.pickerButtonContent}>
+          <ThemedText style={styles.pickerFlag}>
+            {CURRENCY_FLAGS[selected] || '💰'}
+          </ThemedText>
+          <View style={styles.pickerInfo}>
+            <ThemedText style={styles.pickerCode}>{selected}</ThemedText>
+            <ThemedText style={styles.pickerName}>
+              {CURRENCY_NAMES[selected] || selected}
             </ThemedText>
-            <ThemedText style={[
-              styles.popularText,
-              selected === currency && styles.popularTextSelected
-            ]}>
-              {currency}
-            </ThemedText>
-          </TouchableOpacity>
-        ))}
-        
-        {/* More button */}
-        <TouchableOpacity
-          style={styles.moreButton}
-          onPress={() => setModalVisible(true)}
-        >
-          <ThemedText style={styles.moreText}>⋯</ThemedText>
-          <ThemedText style={styles.moreLabel}>More</ThemedText>
-        </TouchableOpacity>
-      </ScrollView>
+          </View>
+        </View>
+        <ThemedText style={styles.pickerArrow}>▼</ThemedText>
+      </TouchableOpacity>
 
       {/* Full currency selection modal */}
       <Modal

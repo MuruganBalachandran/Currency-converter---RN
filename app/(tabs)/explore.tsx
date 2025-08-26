@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import CurrencyPicker from '@/components/CurrencyPicker';
 import ResultCard from '@/components/ResultCard';
 import { ThemedText } from '@/components/ThemedText';
@@ -20,6 +21,31 @@ export default function CurrencyConverterScreen() {
   // Get all available currencies from API
   const CURRENCIES = useMemo(() => getAllCurrencies(), []);
 
+  const saveToHistory = async (amount: string, from: string, to: string, result: string) => {
+    try {
+      const historyItem = {
+        amount,
+        from,
+        to,
+        result,
+        date: new Date().toISOString(),
+      };
+
+      const existingHistory = await AsyncStorage.getItem('conversionHistory');
+      const history = existingHistory ? JSON.parse(existingHistory) : [];
+      
+      // Add new item to the beginning of the array
+      history.unshift(historyItem);
+      
+      // Keep only the last 100 conversions to prevent storage bloat
+      const limitedHistory = history.slice(0, 100);
+      
+      await AsyncStorage.setItem('conversionHistory', JSON.stringify(limitedHistory));
+    } catch (error) {
+      console.error('Failed to save conversion history:', error);
+    }
+  };
+
   const handleConvert = async () => {
     if (!amount || isNaN(Number(amount))) {
       setError('Please enter a valid amount.');
@@ -33,17 +59,13 @@ export default function CurrencyConverterScreen() {
     setResult(result);
     setError(error || '');
     setLoading(false);
-  };
 
-  const swapCurrencies = () => {
-    const temp = fromCurrency;
-    setFromCurrency(toCurrency);
-    setToCurrency(temp);
-    // Auto-convert if amount is entered
-    if (amount && !isNaN(Number(amount))) {
-      setTimeout(() => handleConvert(), 300);
+    // Save to history if conversion was successful
+    if (result && !error) {
+      await saveToHistory(amount, fromCurrency, toCurrency, result);
     }
   };
+
 
   const handleAmountChange = (text: string) => {
     setAmount(text);
@@ -119,57 +141,15 @@ export default function CurrencyConverterScreen() {
     currencySection: {
       marginBottom: 24,
     },
-    currencyRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: 16,
-    },
-    currencyCard: {
-      flex: 1,
-      backgroundColor: colors.primaryTransparent,
-      borderRadius: 20,
-      padding: 16,
-      borderWidth: 1,
-      borderColor: colors.border,
-      elevation: 2,
+    currencyInputGroup: {
+      marginBottom: 16,
     },
     currencyLabel: {
-      fontSize: 14,
+      fontSize: 16,
       fontWeight: '700',
       marginBottom: 8,
-      textAlign: 'center',
       textTransform: 'uppercase',
       letterSpacing: 1,
-    },
-    selectedCurrency: {
-      backgroundColor: colors.primary,
-      borderRadius: 12,
-      padding: 12,
-      marginBottom: 12,
-      alignItems: 'center',
-    },
-    selectedCurrencyText: {
-      color: '#fff',
-      fontSize: 20,
-      fontWeight: 'bold',
-    },
-    swapButton: {
-      backgroundColor: colors.primary,
-      borderRadius: 25,
-      width: 50,
-      height: 50,
-      alignItems: 'center',
-      justifyContent: 'center',
-      elevation: 6,
-      shadowColor: colors.primary,
-      shadowOffset: { width: 0, height: 3 },
-      shadowOpacity: 0.3,
-      shadowRadius: 6,
-    },
-    swapIcon: {
-      fontSize: 24,
-      color: '#fff',
-      fontWeight: 'bold',
     },
     convertButton: {
       backgroundColor: colors.primary,
@@ -245,34 +225,27 @@ export default function CurrencyConverterScreen() {
 
               {/* Currency Selection */}
               <View style={styles.currencySection}>
-                <View style={styles.currencyRow}>
-                  <View style={styles.currencyCard}>
-                    <ThemedText colorName="primary" style={styles.currencyLabel}>🔄 From</ThemedText>
-                    <View style={styles.selectedCurrency}>
-                      <ThemedText style={styles.selectedCurrencyText}>{fromCurrency}</ThemedText>
-                    </View>
-                    <CurrencyPicker 
-                      currencies={CURRENCIES} 
-                      selected={fromCurrency} 
-                      onSelect={setFromCurrency} 
-                    />
-                  </View>
+                <ThemedText colorName="primary" style={styles.sectionLabel}>💱 Select Currencies</ThemedText>
+                
+                {/* From Currency */}
+                <View style={styles.currencyInputGroup}>
+                  <ThemedText colorName="primary" style={styles.currencyLabel}>🔄 From</ThemedText>
+                  <CurrencyPicker 
+                    currencies={CURRENCIES} 
+                    selected={fromCurrency} 
+                    onSelect={setFromCurrency} 
+                  />
+                </View>
 
-                  <TouchableOpacity style={styles.swapButton} onPress={swapCurrencies}>
-                    <ThemedText style={styles.swapIcon}>⇅</ThemedText>
-                  </TouchableOpacity>
 
-                  <View style={styles.currencyCard}>
-                    <ThemedText colorName="primary" style={styles.currencyLabel}>🎯 To</ThemedText>
-                    <View style={styles.selectedCurrency}>
-                      <ThemedText style={styles.selectedCurrencyText}>{toCurrency}</ThemedText>
-                    </View>
-                    <CurrencyPicker 
-                      currencies={CURRENCIES} 
-                      selected={toCurrency} 
-                      onSelect={setToCurrency} 
-                    />
-                  </View>
+                {/* To Currency */}
+                <View style={styles.currencyInputGroup}>
+                  <ThemedText colorName="primary" style={styles.currencyLabel}>🎯 To</ThemedText>
+                  <CurrencyPicker 
+                    currencies={CURRENCIES} 
+                    selected={toCurrency} 
+                    onSelect={setToCurrency} 
+                  />
                 </View>
               </View>
 
